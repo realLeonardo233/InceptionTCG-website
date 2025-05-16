@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Realm</title>
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: #1e40af;
+            color: white;
+            padding: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .store-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .change-store-btn {
+            margin-left: 8px;
+            font-size: 0.75rem;
+            background-color: #1e3a8a;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .change-store-btn:hover {
+            background-color: #1e4ed8;
+        }
+
+        /* Main Content */
+        main {
+            flex-grow: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+            width: 100%;
+        }
+
+        /* Store Selection Screen */
+        .store-selection {
+            text-align: center;
+            margin: 32px 0;
+        }
+
+        .welcome-title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+
+        .selection-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 32px;
+        }
+
+        .stores-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .stores-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .store-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .store-card:hover {
+            transform: scale(1.02);
+        }
+
+        .store-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .store-details {
+            padding: 16px;
+        }
+
+        .store-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .store-info {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+
+        .select-store-btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background-color: #2563eb;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .select-store-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Store Page */
+        .store-banner {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 32px;
+        }
+
+        .store-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .store-content {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        .info-card, .events-card {
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .store-detail {
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            margin-top: 16px;
+        }
+
+        .product-list {
+            list-style-position: inside;
+            list-style-type: disc;
+            color: #4b5563;
+        }
+
+        .events-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .signup-btn {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .signup-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .events-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .event-item {
+            border-left: 4px solid #3b82f6;
+            padding-left: 16px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        .event-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .event-date {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .event-description {
+            margin-top: 4px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1f2937;
+            color: white;
+            padding: 16px;
+            margin-top: 32px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-tagline {
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            max-width: 320px;
+            border-left: 4px solid #3b82f6;
+            animation: slideIn 0.3s ease-out;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification-content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .notification-icon {
+            display: flex;
+        }
+
+        .notification-info {
+            margin-left: 12px;
+        }
+
+        .notification-title {
+            font-weight: 600;
+        }
+
+        .notification-message {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-top: 4px;
+        }
+
+        .notification-action {
+            color: #2563eb;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .close-button {
+            color: #9ca3af;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 50;
+            display: none;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            display: block;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .form-input, .form-select {
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            padding: 8px 12px;
+            width: 100%;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .cancel-btn {
+            color: #4b5563;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background-color: #2563eb;
+            color: white;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <h1 class="logo">Card Realm</h1>
+            <div class="store-indicator" id="storeIndicator" style="display: none;">
+                <span id="selectedStoreName"></span>
+                <button class="change-store-btn" onclick="goBackToSelection()">Change</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Store Selection Screen -->
+        <div id="storeSelection" class="store-selection">
+            <h2 class="welcome-title">Welcome to Card Realm</h2>
+            <p class="selection-subtitle">Please select a store location to continue:</p>
+            
+            <div class="stores-grid">
+                <!-- Store 1 -->
+                <div class="store-card" onclick="selectStore(0)">
+                    <img src="https://placehold.co/800x450/e9ecef/495057?text=Trading+Cards+Store" alt="Trading Cards Store" class="store-image">
+                    <div class="store-details">
+                        <h3 class="store-name">Trading Cards Store</h3>
+                        <p class="store-info">123 Main Street, Downtown</p>
+                        <p class="store-info">Mon-Fri: 10am-8pm, Sat-Sun: 11am-6pm</p>
+                        <p class="store-info">(555) 123-4567</p>
+                        <button class="select-store-btn">Select this store</button>
+                    </div>
+                </div>
+                
+                <!-- Store 2 -->
+                <div class="store-card" onclick="selectStore(1)">
+                    <img src="https://placehold.co/800x450/e9ecef/495057?text=Dennitoria's+Secret" alt="Dennitoria's Secret" class="store-image">
+                    <div class="store-details">
+                        <h3 class="store-name">Dennitoria's Secret</h3>
+                        <p class="store-info">456 Main Street, Downtown</p>
+                        <p class="store-info">Mon-Sat: 11am-9pm, Sun: 12pm-6pm</p>
+                        <p class="store-info">(555) 987-6543</p>
+                        <button class="select-store-btn">Select this store</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Store Home Page -->
+        <div id="storePage" style="display: none;">
+            <img id="storeBanner" src="" alt="" class="store-banner">
+            
+            <div class="store-content">
+                <!-- Store Information -->
+                <div class="info-card">
+                    <h2 class="card-title">Store Information</h2>
+                    <p class="store-detail"><strong>Address:</strong> <span id="storeAddress"></span></p>
+                    <p class="store-detail"><strong>Hours:</strong> <span id="storeHours"></span></p>
+                    <p class="store-detail"><strong>Phone:</strong> <span id="storePhone"></span></p>
+                    <div>
+                        <h3 class="section-title">Featured Products</h3>
+                        <ul class="product-list">
+                            <li>Latest Card Sets</li>
+                            <li>Premium Sleeves & Deck Boxes</li>
+                            <li>Collectible Singles</li>
+                            <li>Gaming Accessories</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Upcoming Events -->
+                <div class="events-card">
+                    <div class="events-header">
+                        <h2 class="card-title">Upcoming Events</h2>
+                        <button class="signup-btn" onclick="showEventSignup()">Sign Up</button>
+                    </div>
+                    
+                    <div id="eventsList" class="events-list">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Card Realm. All rights reserved.</p>
+            <p class="footer-tagline">The ultimate destination for trading card game enthusiasts</p>
+        </div>
+    </footer>
+
+    <!-- Notification Popup -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <div class="notification-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                </svg>
+                <div class="notification-info">
+                    <h3 class="notification-title">New Event Alert!</h3>
+                    <p class="notification-message">
+                        Don't miss our special tournament this weekend at both locations!
+                    </p>
+                    <button class="notification-action">Learn More</button>
+                </div>
+            </div>
+            <button class="close-button" onclick="closeNotification()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Event Signup Modal -->
+    <div id="eventSignupModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Sign Up for an Event</h2>
+                <button class="close-button" onclick="closeEventSignup()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="modal-form">
+                <div class="form-group">
+                    <label class="form-label" for="name">Full Name</label>
+                    <input type="text" id="name" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="event">Select Event</label>
+                    <select id="eventSelect" class="form-select" required>
+                        <option value="">-- Select an Event --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="participants">Number of Participants</label>
+                    <input type="number" id="participants" class="form-input" min="1" max="10" value="1" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="cancel-btn" onclick="closeEventSignup()">Cancel</button>
+                    <button class="submit-btn" onclick="submitEventSignup()">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store data
+        const stores = [
+            {
+                id: 1,
+                name: "Trading Cards Store",
+                address: "123 Main Street, Downtown",
+                hours: "Mon-Fri: 10am-8pm, Sat-Sun: 11am-6pm",
+                phone: "(555) 123-4567",
+                image: "https://placehold.co/800x450/e9ecef/495057?text=Trading+Cards+Store"
+            },
+            {
+                id: 2,
+                name: "Dennitoria's Secret",
+                address: "456 Main Street, Downtown",
+                hours: "Mon-Sat: 11am-9pm, Sun: 12pm-6pm",
+                phone: "(555) 987-6543",
+                image: "https://placehold.co/800x450/e9ecef/495057?text=Dennitoria's+Secret"
+            }
+        ];
+
+        // Events data
+        const events = [
+            {
+                id: 1,
+                storeId: 1,
+                title: "Friday Night Tournament",
+                date: "May 17, 2025",
+                time: "6:00 PM - 10:00 PM",
+                description: "Weekly tournament with prizes for top players."
+            },
+            {
+                id: 2,
+                storeId: 1,
+                title: "New Set Release Party",
+                date: "May 24, 2025",
+                time: "12:00 PM - 5:00 PM",
+                description: "Come celebrate the release of the newest expansion!"
+            },
+            {
+                id: 3,
+                storeId: 2,
+                title: "Beginner's Workshop",
+                date: "May 18, 2025",
+                time: "2:00 PM - 4:00 PM",
+                description: "Learn how to play with our expert staff."
+            },
+            {
+                id: 4,
+                storeId: 2,
+                title: "Collector's Swap Meet",
+                date: "May 25, 2025",
+                time: "1:00 PM - 6:00 PM",
+                description: "Trade with other collectors and find rare cards."
+            }
+        ];
+
+        let selectedStore = null;
+
+        // Show notification after page load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('notification').style.display = 'block';
+            }, 2000);
+        });
+
+        // Select a store
+        function selectStore(index) {
+            selectedStore = stores[index];
+            
+            // Update store indicator
+            document.getElementById('selectedStoreName').textContent = selectedStore.name;
+            document.getElementById('storeIndicator').style.display = 'flex';
+            
+            // Update store details
+            document.getElementById('storeBanner').src = selectedStore.image;
+            document.getElementById('storeBanner').alt = selectedStore.name;
+            document.getElementById('storeAddress').textContent = selectedStore.address;
+            document.getElementById('storeHours').textContent = selectedStore.hours;
+            document.getElementById('storePhone').textContent = selectedStore.phone;
+            
+            // Show store events
+            const eventsList = document.getElementById('eventsList');
+            eventsList.innerHTML = '';
+            
+            const storeEvents = events.filter(event => event.storeId === selectedStore.id);
+            
+            if (storeEvents.length > 0) {
+                storeEvents.forEach(event => {
+                    const eventItem = document.createElement('div');
+                    eventItem.className = 'event-item';
+                    eventItem.innerHTML = `
+                        <h3 class="event-title">${event.title}</h3>
+                        <p class="event-date">${event.date} • ${event.time}</p>
+                        <p class="event-description">${event.description}</p>
+                    `;
+                    eventsList.appendChild(eventItem);
+                });
+            } else {
+                eventsList.innerHTML = '<p>No upcoming events at this location.</p>';
+            }
+            
+            // Update event select dropdown
+            const eventSelect = document.getElementById('eventSelect');
+            eventSelect.innerHTML = '<option value="">-- Select an Event --</option>';
+            
+            storeEvents.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.title;
+                option.textContent = `${event.title} - ${event.date}`;
+                eventSelect.appendChild(option);
+            });
+            
+            // Show store page, hide selection
+            document.getElementById('storeSelection').style.display = 'none';
+            document.getElementById('storePage').style.display = 'block';
+        }
+
+        // Go back to store selection
+        function goBackToSelection() {
+            document.getElementById('storeSelection').style.display = 'block';
+            document.getElementById('storePage').style.display = 'none';
+            document.getElementById('storeIndicator').style.display = 'none';
+            selectedStore = null;
+        }
+
+        // Close notification
+        function closeNotification() {
+            document.getElementById('notification').style.display = 'none';
+        }
+
+        // Show event signup modal
+        function showEventSignup() {
+            document.getElementById('eventSignupModal').style.display = 'flex';
+        }
+
+        // Close event signup modal
+        function closeEventSignup() {
+            document.getElementById('eventSignupModal').style.display = 'none';
+        }
+
+        // Submit event signup
+        function submitEventSignup() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const event = document.getElementById('eventSelect').value;
+            const participants = document.getElementById('participants').value;
+            
+            if (!name || !email || !event) {
+                alert('Please fill out all required fields');
+                return;
+            }
+            
+            alert(`Thank you for signing up for ${event}! We'll send a confirmation to ${email}.`);
+            closeEventSignup();
+            
+            // Reset form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('eventSelect').value = '';
+            document.getElementById('participants').value = '1';
+        }
+    </script>
+</body>
+</html>
