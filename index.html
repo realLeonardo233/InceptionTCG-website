@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Realm</title>
+    <title>InceptionTCG</title>
     <style>
         /* Base styles */
         * {
@@ -228,6 +228,7 @@
         .events-list {
             display: grid;
             gap: 16px;
+            <button class="signup-btn" onclick="showEventSignup()">Sign Up</button>
         }
 
         .event-item {
@@ -433,10 +434,10 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header MODIFY HERE 最上层网站标题-->
     <header>
         <div class="header-container">
-            <h1 class="logo">Card Realm</h1>
+            <h1 class="logo">InceptionTCG</h1>
             <div class="store-indicator" id="storeIndicator" style="display: none;">
                 <span id="selectedStoreName"></span>
                 <button class="change-store-btn" onclick="goBackToSelection()">Change</button>
@@ -446,25 +447,25 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Store Selection Screen -->
+        <!-- Store Selection Screen MODIFY HERE 商店选择欢迎界面-->
         <div id="storeSelection" class="store-selection">
-            <h2 class="welcome-title">Welcome to Card Realm</h2>
+            <h2 class="welcome-title">Welcome to InceptionTCG</h2>
             <p class="selection-subtitle">Please select a store location to continue:</p>
             
             <div class="stores-grid">
-                <!-- Store 1 -->
+                <!-- Store 1 Information MODIFY HERE-->
                 <div class="store-card" onclick="selectStore(0)">
                     <img src="https://placehold.co/800x450/e9ecef/495057?text=Trading+Cards+Store" alt="Trading Cards Store" class="store-image">
                     <div class="store-details">
-                        <h3 class="store-name">Trading Cards Store</h3>
-                        <p class="store-info">123 Main Street, Downtown</p>
+                        <h3 class="store-name">Kaleido TCG</h3>
+                        <p class="store-info">113 Tidewater St, Jersey City, NJ</p>
                         <p class="store-info">Mon-Fri: 10am-8pm, Sat-Sun: 11am-6pm</p>
                         <p class="store-info">(555) 123-4567</p>
                         <button class="select-store-btn">Select this store</button>
                     </div>
                 </div>
                 
-                <!-- Store 2 -->
+                <!-- Store 2 MODIFY HERE-->
                 <div class="store-card" onclick="selectStore(1)">
                     <img src="https://placehold.co/800x450/e9ecef/495057?text=Dennitoria's+Secret" alt="Dennitoria's Secret" class="store-image">
                     <div class="store-details">
@@ -504,7 +505,6 @@
                 <div class="events-card">
                     <div class="events-header">
                         <h2 class="card-title">Upcoming Events</h2>
-                        <button class="signup-btn" onclick="showEventSignup()">Sign Up</button>
                     </div>
                     
                     <div id="eventsList" class="events-list">
@@ -518,7 +518,7 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Card Realm. All rights reserved.</p>
+            <p>&copy; 2025 InceptionTCG. All rights reserved.</p>
             <p class="footer-tagline">The ultimate destination for trading card game enthusiasts</p>
         </div>
     </footer>
@@ -597,8 +597,8 @@
         const stores = [
             {
                 id: 1,
-                name: "Trading Cards Store",
-                address: "123 Main Street, Downtown",
+                name: "Kaleido TCG",
+                address: "113 Tidewater St, Jersey City, NJ",
                 hours: "Mon-Fri: 10am-8pm, Sat-Sun: 11am-6pm",
                 phone: "(555) 123-4567",
                 image: "https://placehold.co/800x450/e9ecef/495057?text=Trading+Cards+Store"
@@ -613,7 +613,12 @@
             }
         ];
 
-        // Events data
+        // Events data MODIFY HERE
+        // 在这里添加活动，storeId 1 说明是属于Kaleido的活动，storeId 2 说明是另一家店的活动
+        // store 1 的活动只会在 store 1 页面显示，以此类推
+        // id 决定显示顺序
+        // title，date，time，description应该都挺好理解，注意一定要加双引号
+
         const events = [
             {
                 id: 1,
@@ -652,11 +657,11 @@
         let selectedStore = null;
 
         // Show notification after page load
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('notification').style.display = 'block';
-            }, 2000);
-        });
+        //window.addEventListener('load', function() {
+            //setTimeout(function() {
+                //document.getElementById('notification').style.display = 'block';
+            //}, 2000);
+        //});
 
         // Select a store
         function selectStore(index) {
